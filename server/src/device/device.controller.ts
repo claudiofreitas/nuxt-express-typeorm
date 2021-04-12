@@ -1,4 +1,5 @@
 import { NextFunction, Request, Response, Router } from 'express'
+import { DateTime } from 'luxon'
 import { getRepository } from 'typeorm'
 import DeviceNotFoundException from '../exceptions/DeviceNotFoundException'
 import Controller from '../interfaces/controller.interface'
@@ -48,7 +49,10 @@ class DeviceController implements Controller {
     request: Request,
     response: Response
   ) => {
-    const deviceData: CreateDeviceDto = request.body
+    const deviceData: CreateDeviceDto = {
+      ...request.body,
+      lastCheckedOutDate: DateTime.now().toISO(),
+    }
     const newDevice = this.deviceRepository.create(deviceData)
     await this.deviceRepository.save(newDevice)
     response.send(newDevice)
@@ -74,11 +78,14 @@ class DeviceController implements Controller {
     next: NextFunction
   ) => {
     const id = request.params.id
-    const postData: Device = request.body
-    await this.deviceRepository.update(id, postData)
-    const updatedPost = await this.deviceRepository.findOne(id)
-    if (updatedPost) {
-      response.send(updatedPost)
+    const deviceData: CreateDeviceDto = {
+      ...request.body,
+      lastCheckedOutDate: DateTime.now().toISO(),
+    }
+    await this.deviceRepository.update(id, deviceData)
+    const updatedDevice = await this.deviceRepository.findOne(id)
+    if (updatedDevice) {
+      response.send(updatedDevice)
     } else {
       next(new DeviceNotFoundException(id))
     }
