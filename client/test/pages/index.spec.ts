@@ -51,7 +51,7 @@ describe('DeviceListPage', () => {
     await wrapper.vm.onEdit(`${dummyDevice.id}`)
     await wrapper.vm.$nextTick
 
-    expect(mockRouterPush).toHaveBeenCalledWith(`/${dummyDevice.id}`)
+    expect(mockRouterPush).toHaveBeenCalledWith(`/${dummyDevice.id}/edit`)
   })
 
   it('should delete device on click to delete icon', async () => {

@@ -2,7 +2,9 @@
   <v-card class="mx-auto" width="500" tile>
     <v-list-item v-for="device in devices" :key="device.id">
       <v-list-item-content>
-        <v-list-item-title>{{ device.device }}</v-list-item-title>
+        <v-list-item-title>
+          <a :href="'/' + device.id">{{ device.device }}</a>
+        </v-list-item-title>
         <v-list-item-subtitle>OS: {{ device.os }}</v-list-item-subtitle>
         <v-list-item-subtitle>
           Manufacturer: {{ device.manufacturer }}
@@ -46,7 +48,7 @@ export default {
   },
   methods: {
     async onEdit(id: number) {
-      await this.$router.push(`/${id}`)
+      await this.$router.push(`/${id}/edit`)
     },
     async onDelete(id: string) {
       await this.$axios.$delete(`http://localhost:5000/devices/${id}`)

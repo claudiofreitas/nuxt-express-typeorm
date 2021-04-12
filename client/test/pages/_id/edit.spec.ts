@@ -1,7 +1,7 @@
 import Vue from 'vue'
 import Vuetify from 'Vuetify'
 import { shallowMount, ThisTypedShallowMountOptions } from '@vue/test-utils'
-import DeviceEditPage from '@/pages/_id.vue'
+import DeviceEditPage from '@/pages/_id/edit.vue'
 
 Vue.use(Vuetify)
 
