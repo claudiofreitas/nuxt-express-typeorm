@@ -1,0 +1,25 @@
+GET http://localhost:5000/devices HTTP/1.1
+###
+GET http://localhost:5000/devices/1 HTTP/1.1
+###
+POST http://localhost:5000/devices HTTP/1.1
+content-type: application/json
+
+{
+    "device":"MotoG", 
+    "os":"Android4.3", 
+    "manufacturer":"Motorola", 
+    "lastCheckedOutDate":"2016-02-21T09:10:00-05:00", 
+    "lastCheckedOutBy":"", 
+    "isCheckedOut":false 
+}
+###
+DELETE http://localhost:5000/devices/1 HTTP/1.1
+###
+PATCH http://localhost:5000/devices/1 HTTP/1.1
+content-type: application/json
+
+{
+    "device":"MotoG1", 
+    "isCheckedOut":true 
+}
