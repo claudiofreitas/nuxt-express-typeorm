@@ -26,7 +26,7 @@
       class="mr-4"
       color="success"
       :disabled="!isValid"
-      @click.prevent="submit"
+      @click.prevent="onSubmit"
     >
       submit
     </v-btn>
@@ -62,13 +62,12 @@ export default {
     this.isCheckedOut = device.isCheckedOut
   },
   methods: {
-    async submit() {
+    async onSubmit() {
       const path = `http://localhost:5000/devices/${this.$route.params.id}`
       await this.$axios.$patch(path, {
         device: this.device,
         os: this.os,
         manufacturer: this.manufacturer,
-        lastCheckedOutDate: this.isCheckedOut && new Date().toISOString(),
         lastCheckedOutBy: this.lastCheckedOutBy,
         isCheckedOut: this.isCheckedOut,
       })
