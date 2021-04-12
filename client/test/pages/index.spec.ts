@@ -1,39 +1,70 @@
+import Vue from 'vue'
 import Vuetify from 'Vuetify'
-import {
-  createLocalVue,
-  shallowMount,
-  ThisTypedShallowMountOptions,
-} from '@vue/test-utils'
+import { shallowMount, ThisTypedShallowMountOptions } from '@vue/test-utils'
 import DeviceListPage from '@/pages/index.vue'
 
-const localVue = createLocalVue()
-let vuetify: Vuetify
+Vue.use(Vuetify)
 
-beforeEach(() => {
-  vuetify = new Vuetify()
-})
-
-const mountFunction = (options: ThisTypedShallowMountOptions<any>) => {
+const mockAxiosGet = jest.fn()
+const mockAxiosDelete = jest.fn()
+const mockRouterPush = jest.fn()
+const mountFunction = (options?: ThisTypedShallowMountOptions<any>) => {
   return shallowMount(DeviceListPage, {
-    localVue,
-    vuetify,
-    stubs: {
-      'v-card': true,
+    mocks: {
+      $axios: {
+        $get: mockAxiosGet,
+        $delete: mockAxiosDelete,
+      },
+      $router: {
+        push: mockRouterPush,
+      },
     },
     ...options,
   })
 }
+const createDummyDevice = () => ({
+  id: 3,
+  device: 'MotoG',
+  os: 'Android4.3',
+  manufacturer: 'Motorola',
+  lastCheckedOutDate: '2016-02-21T09:10:00-05:00',
+  lastCheckedOutBy: 'ChrisEvans',
+  isCheckedOut: false,
+})
 
 describe('DeviceListPage', () => {
+  beforeEach(() => {
+    jest.resetAllMocks()
+  })
+
   it('should list devices on mount', async () => {
-    const mockAxiosGet = jest.fn()
-    await mountFunction({
-      mocks: {
-        $axios: {
-          $get: mockAxiosGet,
-        },
-      },
-    })
+    await mountFunction()
     expect(mockAxiosGet).toHaveBeenCalledWith('http://localhost:5000/devices')
+  })
+
+  it('should redirect to edit page on click to pencil icon', async () => {
+    const dummyDevice = createDummyDevice()
+    mockAxiosGet.mockResolvedValue([dummyDevice])
+
+    const wrapper = await mountFunction()
+    await wrapper.vm.$nextTick
+    await wrapper.vm.onEdit(`${dummyDevice.id}`)
+    await wrapper.vm.$nextTick
+
+    expect(mockRouterPush).toHaveBeenCalledWith(`/${dummyDevice.id}`)
+  })
+
+  it('should delete device on click to delete icon', async () => {
+    const dummyDevice = createDummyDevice()
+    mockAxiosGet.mockResolvedValue([dummyDevice])
+
+    const wrapper = await mountFunction()
+    await wrapper.vm.$nextTick
+    await wrapper.vm.onDelete(`${dummyDevice.id}`)
+    await wrapper.vm.$nextTick
+
+    expect(mockAxiosDelete).toHaveBeenCalledWith(
+      `http://localhost:5000/devices/${dummyDevice.id}`
+    )
   })
 })
