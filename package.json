@@ -15,8 +15,11 @@
   },
   "scripts": {
     "dev": "concurrently -n client,server -c 'green,cyan' 'yarn client' 'yarn server'",
+    "test": "yarn client:test --silent --coverage && yarn server:test --silent --coverage",
     "client": "yarn workspace client dev",
-    "server": "yarn workspace server dev"
+    "server": "yarn workspace server dev",
+    "client:test": "yarn workspace client test",
+    "server:test": "yarn workspace server test"
   },
   "devDependencies": {
     "concurrently": "^6.0.1"

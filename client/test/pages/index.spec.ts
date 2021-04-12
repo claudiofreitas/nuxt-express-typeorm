@@ -1,5 +1,9 @@
 import Vuetify from 'Vuetify'
-import { createLocalVue, shallowMount } from '@vue/test-utils'
+import {
+  createLocalVue,
+  shallowMount,
+  ThisTypedShallowMountOptions,
+} from '@vue/test-utils'
 import DeviceListPage from '@/pages/index.vue'
 
 const localVue = createLocalVue()
@@ -9,7 +13,7 @@ beforeEach(() => {
   vuetify = new Vuetify()
 })
 
-const mountFunction = (options: object) => {
+const mountFunction = (options: ThisTypedShallowMountOptions<any>) => {
   return shallowMount(DeviceListPage, {
     localVue,
     vuetify,
@@ -21,9 +25,15 @@ const mountFunction = (options: object) => {
 }
 
 describe('DeviceListPage', () => {
-  test('is a Vue instance', () => {
-    const wrapper = mountFunction({})
-
-    expect(wrapper.vm).toBeTruthy()
+  it('should list devices on mount', async () => {
+    const mockAxiosGet = jest.fn()
+    await mountFunction({
+      mocks: {
+        $axios: {
+          $get: mockAxiosGet,
+        },
+      },
+    })
+    expect(mockAxiosGet).toHaveBeenCalledWith('http://localhost:5000/devices')
   })
 })

@@ -24,3 +24,15 @@ yarn install
 # server: localhost:5000
 yarn dev
 ```
+
+## Run tests
+```sh
+# Run all tests
+yarn test
+
+# Run client tests
+yarn client:test
+
+# Run server tests
+yarn server:test
+```
