@@ -1,0 +1,24 @@
+{
+  "name": "nuxt-express-typeorm",
+  "version": "1.0.0",
+  "author": "Marcuz <macoycorpuz@gmail.com>",
+  "license": "MIT",
+  "private": true,
+  "workspaces": {
+    "packages": [
+      "client",
+      "server"
+    ],
+    "nohoist": [
+      "**"
+    ]
+  },
+  "scripts": {
+    "dev": "concurrently -n client,server -c 'green,cyan' 'yarn client' 'yarn server'",
+    "client": "yarn workspace client dev",
+    "server": "yarn workspace server dev"
+  },
+  "devDependencies": {
+    "concurrently": "^6.0.1"
+  }
+}

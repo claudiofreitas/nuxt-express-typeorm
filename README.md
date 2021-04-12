@@ -7,6 +7,13 @@
 | [client](client)     |     Nuxt frontend     |
 | [server](server)     | REST API with TypeORM |
 
+## Prerequisite
+
+The server uses sqlite3 for the database. If the database is not working, please install sqlite3.
+```sh
+brew install sqlite
+```
+
 ## Build Setup
 ```sh
 # install dependencies
